@@ -1,0 +1,37 @@
+.bg_darkPurple{background-color: rgba(55,25,74,1);background-color:#371949}
+.bg_atomicPurple{background-color: rgba(228,22a,227,1);background-color:#9633FE}
+.bg_atomicPurple_transparency{background-color: rgba(124,0,254,0.8)}
+.bg_mediumPurple{background-color: rgba(126,107,138,1);background-color:#7e6b8a}
+.bg_mediumLightPurple{background-color: rgba(153,139,164,1);background-color:#998ba4}
+.bg_lightPurple{background-color: rgba(215,209,218,1);background-color:#d7d1da}
+.bg_whitePurple{background-color: rgba(249,248,250,1);background-color:#f9f8fa}
+
+.bg_white{background-color: rgba(255,255,255,1);background-color:#FFF}
+.bg_crimson{background-color: rgba(235,17,54,1);background-color:#EB1136}
+
+.bg_aquaMarine{background-color: rgba(126,229,227,1);background-color:#63EFB4}
+.bg_turquoise{background-color: rgba(228,229,227,1);background-color:#4FF2DE}
+.bg_skyBlue{background-color: rgba(126,107,138,1);background-color:#30CFFF}
+
+.bg_blue{background-color: rgba(126,107,138,1);background-color:#4F94FE}
+.bg_purple{background-color: rgba(126,107,138,1);background-color:#B079FD}
+.bg_pink{background-color: rgba(126,107,138,1);background-color:#DE5AFE}
+
+.bg_melon{background-color: rgba(255,255,255,1);background-color:#FC5C83}
+.bg_salmon{background-color: rgba(126,107,138,1);background-color:#FF8067}
+.bg_tangerine{background-color: rgba(126,107,138,1);background-color:#FF9456}
+
+
+/***********************
+Font colors must meet a11y guidelines for contrast if you are not familiar with them
+look them up in the styleguide. notes below are for fonts on white background only.
+************************/
+
+.color_darkPurple{color:#371949}/* a11y OK */
+.color_atomicPurple{color:#9633FE}/* a11y OK */
+.color_mediumPurple{color:#7e6b8a}/* a11y OK */
+.color_mediumLightPurple{color:#998ba4}/* a11y OK ONLY for large font 14px bold or 18px normal or larger*/
+.color_white{color:#fff}
+
+.border_lightPurple{border:1px solid #d7d1da}
+.border_mediumLightPurple{border:1px solid #998ba4}

@@ -1,0 +1,100 @@
+/* Common - START */
+.catagoryHead{
+    color: #444;
+    font-weight: 600;
+    font-size: 21px;
+}
+.main-container {
+    width: 1400px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+@media (max-width: 767px) {
+    .mobile-disp-none {
+        display: none;
+    }
+    .mobile-disp-block {
+        display: block;
+    }
+    .container-fluid {
+        padding: 0;
+    }
+}
+@media (min-width: 768px) {
+    .desktop-disp-none {
+        display: none;
+    }
+    .desktop-disp-block {
+        display: block;
+    }
+}
+/* Common - END */
+/* GridTypeOne - START */
+
+.gridTypeOneContainer{
+    height: 340px;
+    border: 1px solid #EAEAEA;
+    background: #fff;
+    position: relative;
+    margin-bottom: 24px;
+    .brandImage{
+        display: block;
+        height: 100px;
+        // width: 232px;
+        border-bottom: 1px dashed #CECECE;
+        position: relative;
+        overflow: hidden;
+    }
+    .brandImage img{
+        height: 115px;
+        margin: 0 auto;
+        display: block;
+    }
+    .brandImage::after{
+        content: "";
+        background: url(/img/ico/scissor.png) no-repeat;
+        width: 15px;
+        height: 15px;
+        display: inline-block;
+        position: absolute;
+        bottom: -9px;
+        left: 25px;
+    }
+    .brandName{
+        float: right;
+        margin-right: 12px;
+        border-bottom: 3px solid #cc5251;
+        line-height: 28px;
+        font-weight: bold;
+    }
+    .brandName:after{
+        content: "";
+        clear: both;
+    }
+    .brandDesc{
+        height: 80px;
+        color: #4a4a4a;
+        font-size: 17px;
+        overflow: hidden;
+        clear: both;
+        padding: 15px 17px 0;
+    }
+    .promoText{
+        color: #1669b0;
+        font-size: 15px;
+        padding: 15px 17px 0;
+    }
+    .gridAncor{
+        margin-left: 4%;
+        width: 92%;
+        position: absolute;
+        bottom: 15px;
+        font: normal 17px/34px 'Arial,Helvetica,sans-serif';
+        font-weight: 700;
+        text-align: center;
+        background-color: #1e8cbe;
+        color: white;
+        border-bottom: 2px solid #1669AF;
+    }
+}
+/* GridTypeOne - END */
