@@ -6,10 +6,36 @@
 
 import React, { PropTypes } from 'react';
 import FilterTypeBox from 'components/FilterTypeBox'
+import GridTypeOne from 'components/common/GridTypeOne'
 // import styled from 'styled-components';
 export class CategoryHp extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  constructor(props) {
+    super(props);
+    this.state = {
+      productList: undefined
+    };
+  }
   componentDidMount() {
-    this.props.fetchCategoryData('https://m.gozefo.com/api/category/bangalore/beds/facets?filter=1&filterFeatures.condition=unboxed%20plus')
+    this.props.fetchCategoryData('https://m.gozefo.com/api/category/bangalore/beds/product-list?filter=1&from=0&size=24')
+  }
+  componentWillReceiveProps(newProps) {
+    // const {
+    //   HomePage: {
+    //     responseData: {
+    //       data: {
+    //         productList
+    //       } = {}
+    //     } = {}
+    //   } = {}
+    // } = newProps;
+
+    const productList = newProps.HomePage.responseData.data.searchResponse.hits;
+
+    Array.isArray(productList) && productList.length && this.setState({ productList });
+    debugger
+  }
+  componentDidReceiveProps(newProps) {
+    debugger
   }
   render() {
     const dropdown = [{
@@ -44,6 +70,16 @@ export class CategoryHp extends React.Component { // eslint-disable-line react/p
             <div className="col-md-2 filter-wrapper">
               <FilterTypeBox boxHeading="Condition" dropdown={dropdown} />
             </div>
+          </div>
+          <div className="row centerMe grid-container">
+            { this.state.productList
+              ?
+              this.state.productList.map((eachProduct) => (
+                < GridTypeOne key={eachProduct.id} {...eachProduct} />
+              ))
+              :
+                <div>Loading</div>
+            }
           </div>
         </div>
       </main>

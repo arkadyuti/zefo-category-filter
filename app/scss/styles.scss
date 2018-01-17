@@ -94,21 +94,22 @@ ul,li {
 /* GridTypeOne - START */
 
 .gridTypeOneContainer{
-    height: 340px;
+    min-height: 340px;
     border: 1px solid #EAEAEA;
     background: #fff;
     position: relative;
     margin-bottom: 24px;
+    text-align: left;
+    padding: 15px 0;
     .brandImage{
         display: block;
-        height: 100px;
-        // width: 232px;
+        height: 200px;
         border-bottom: 1px dashed #CECECE;
         position: relative;
         overflow: hidden;
     }
     .brandImage img{
-        height: 115px;
+        height: 100%;
         margin: 0 auto;
         display: block;
     }
@@ -142,9 +143,34 @@ ul,li {
         padding: 15px 17px 0;
     }
     .promoText{
+        font-size: 12px;
+        padding: 15px 17px 0;
+        color: gray;
+    }
+    .priceContainer {
         color: #1669b0;
         font-size: 15px;
         padding: 15px 17px 0;
+        span {
+            padding-right: 10px;
+        }
+        .offerPrice {
+            font-size: 20px;
+            color: #20CACA;
+        }
+        .strikedPrice {
+            color: gray;
+        }
+        .strikedPrice:before {
+            content: '________';
+            height: 1px;
+            color: gray;
+            position: absolute;
+            bottom: 39px;
+        }
+        .discount {
+            color: #DB9300;
+        }
     }
     .gridAncor{
         margin-left: 4%;
