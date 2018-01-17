@@ -8,25 +8,9 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import makeSelectHomePage from './selectors';
-import {requestLoad} from './actions'
+import { fetchCategoryData } from './actions';
+import CategoryHp from 'components/CategoryHP';
 
-export class HomePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
-  componentDidMount(){
-    this.props.dispatch(requestLoad('/user'))
-
-  }
-  render() {
-    return (
-      <main>
-        sad
-      </main>
-    );
-  }
-}
-
-HomePage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-};
 
 const mapStateToProps = createStructuredSelector({
   HomePage: makeSelectHomePage(),
@@ -35,7 +19,8 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     dispatch,
+    fetchCategoryData: (apiEndpoint) => dispatch(fetchCategoryData(apiEndpoint))
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
+export default connect(mapStateToProps, mapDispatchToProps)(CategoryHp);

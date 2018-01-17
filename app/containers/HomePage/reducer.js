@@ -7,6 +7,9 @@
 import { fromJS } from 'immutable';
 import {
   DEFAULT_ACTION,
+  FETCH_CATEGORY_DATA,
+  CATEGORY_DATA_SUCCESS,
+  CATEGORY_DATA_FAILURE,
 } from './constants';
 
 const initialState = fromJS({
@@ -17,21 +20,16 @@ function homePageReducer(state = initialState, action) {
   switch (action.type) {
     case DEFAULT_ACTION:
       return state;
-    case 'REQUEST_LOAD':
+    case CATEGORY_DATA_FAILURE:
       return state
-        .set('isLoading', true)
-    case 'RECEIVE_LOAD':
-      return state.set('isLoading',false).set('data',action.payload);
+        .set('errorData', action.payload)
+    case CATEGORY_DATA_SUCCESS:
+      return state
+        .set('responseData', action.payload)
     default:
       return state;
   }
 }
 
-// return {
-//         ...state,
-//         ...action.payload,
-//         count: state.count + 1,
-//         isLoading: false,
-//       }
 
 export default homePageReducer;

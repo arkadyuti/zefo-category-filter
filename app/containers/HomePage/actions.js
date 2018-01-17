@@ -6,6 +6,9 @@
 
 import {
   DEFAULT_ACTION,
+  FETCH_CATEGORY_DATA,
+  CATEGORY_DATA_SUCCESS,
+  CATEGORY_DATA_FAILURE,
 } from './constants';
 
 export function defaultAction() {
@@ -13,19 +16,21 @@ export function defaultAction() {
     type: DEFAULT_ACTION,
   };
 }
-
-export function requestLoad(api) {
-  console.log('actions',api)
-    return {
-        type: 'REQUEST_LOAD',
-        payload: api
-    };
+export function fetchCategoryData(payload) {
+  return {
+    type: FETCH_CATEGORY_DATA,
+    payload
+  };
 }
-
-export function receiveLoad(data) {
-  console.log('receiveLoad',data)
-    return {
-        type: 'RECEIVE_LOAD',
-        payload: data
-    }
+export function categoryDataSuccess(payload) {
+  return {
+    type: CATEGORY_DATA_SUCCESS,
+    payload
+  };
+}
+export function categoryDataFailure(payload) {
+  return {
+    type: CATEGORY_DATA_FAILURE,
+    payload
+  };
 }
