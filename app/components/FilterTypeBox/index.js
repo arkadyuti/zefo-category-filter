@@ -60,7 +60,7 @@ class FilterTypeBox extends React.Component { // eslint-disable-line react/prefe
           allSubFilter = true
         }
       }
-      if(allSubFilter){
+      if (allSubFilter) {
         dropdown[index].checked = true
       }
 
@@ -81,10 +81,26 @@ class FilterTypeBox extends React.Component { // eslint-disable-line react/prefe
   componentDidMount() {
     // console.log("did", this.state.dropdown)
   }
+  componentWillReceiveProps(newProps) {
+    // if (newProps && newProps.allFilterData && newProps.allFilterData.data && newProps.allFilterData.data.filterList) {
+    //   console.log(newProps.allFilterData.data.filterList)
+    //   const filterList = newProps.allFilterData.data.filterList;
+    //   var dropdown = [];
+    //   for (var i = 0; i < filterList.length; i++) {
+    //     if (filterList[i].type !== "range") {
+    //       // console.log(filterList[i])
+    //       var data = {};
+    //       data.label = filterList[i].label
+    //       dropdown.push(data)
+    //     }
+    //   }
+    //   console.log(dropdown)
+    // }
+  }
   render() {
     const { boxHeading } = this.props;
     const { dropdown } = this.state;
-    // console.log(dropdown)
+    console.log(this.props)
     return (
       <li className="box-filter-wrapper" onMouseEnter={this.handleOnMouseEnter} onMouseLeave={this.handleOnMouseLeave}>
         <a>{boxHeading}</a>
@@ -104,7 +120,7 @@ class FilterTypeBox extends React.Component { // eslint-disable-line react/prefe
                           <div key={"subfilter" + ind} className="cursorPointer subfilter-dropdown">
                             <span className="cursorPointer">
                               <input className="cursorPointer" type="checkbox" id={"subfilter-" + ind} onChange={this.handleSubFilterOnClick.bind(this, index, ind)} checked={checkChecked} />
-                              <label className="cursorPointer" htmlFor={"subfilter-" + ind}>{val.label}</label>
+                              <label className="cursorPointer" htmlFor={"subfilter-" + ind}>{val.text}</label>
                             </span>
                           </div>
                         )
