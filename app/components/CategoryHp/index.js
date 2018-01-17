@@ -14,10 +14,22 @@ export class CategoryHp extends React.Component { // eslint-disable-line react/p
   render() {
     const dropdown = [{
       label: "Unboxed Plus",
-      subFilter: ["Unboxed Plus", "Unboxed", "Like New"]
+      subFilter: [{
+        label: "Unboxed Plus"
+      }, {
+        label: "Unboxed"
+      }, {
+        label: "Like New"
+      }]
     }, {
       label: "Unboxed",
-      subFilter: []
+      subFilter: [{
+        label: "Unboxed Plus"
+      }, {
+        label: "Unboxed"
+      }, {
+        label: "Like New"
+      }]
     }, {
       label: "Unboxed Plus",
     }]
