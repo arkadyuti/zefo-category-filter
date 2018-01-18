@@ -6,6 +6,7 @@
 
 import React, { PropTypes } from 'react';
 import { browserHistory } from 'react-router';
+
 import FilterTypeBox from 'components/FilterTypeBox'
 import GridTypeOne from 'components/common/GridTypeOne'
 // import styled from 'styled-components';
@@ -15,7 +16,7 @@ export class CategoryHp extends React.Component { // eslint-disable-line react/p
     this.state = {
       productList: undefined,
       filterData: null,
-      appendUri : '?filter=1'
+      filterApiObject: {}
     };
   }
   setAppendUri(filterType, uri) {
@@ -29,8 +30,53 @@ export class CategoryHp extends React.Component { // eslint-disable-line react/p
     // });
 
   }
+  removeApiUrlNode = (filterHeadingValue, filterValue) => {
+    var finalArray = this.state.filterApiObject[filterHeadingValue]
+    if (finalArray && Array.isArray(finalArray) && finalArray.indexOf(filterValue) > -1) {
+      finalArray.splice(finalArray.indexOf(filterValue), 1);
+    }
+    if (finalArray && Array.isArray(finalArray) && finalArray.length < 1) {
+      delete this.state.filterApiObject[filterHeadingValue];
+    }
+  }
+  addApiUrlNode = (filterHeadingValue, filterValue, subfilterVal) => {
+    // var newObj = {}
+    // newObj[filterHeadingValue] = subfilterVal
+    var finalArray = this.state.filterApiObject[filterHeadingValue] || []
+    finalArray.push(filterValue)
+    if (Array.isArray(subfilterVal)) {
+      finalArray = finalArray.concat(subfilterVal);
+    }
+    this.state.filterApiObject[filterHeadingValue] = finalArray
+
+
+
+  }
+  handleFetchFilterData = () => {
+    var finalObj = this.state.filterApiObject;
+    if (finalObj) {
+      var objKeysArray = Object.keys(finalObj);
+      var newAllApiArray = [];
+      var apiParam = [];
+      var urlStr = ""
+      objKeysArray.map((value, index) => {
+        apiParam.push(value)
+        finalObj[value].map((val, ind) => {
+          urlStr += "&" + value + "=" + val;
+        })
+      })
+      this.props.fetchFilterData("https://m.gozefo.com/api/category/bangalore/beds/facets?filter=1" + urlStr)
+      this.props.fetchCategoryData('https://m.gozefo.com/api/category/bangalore/beds/product-list?filter=1&from=0&size=24&' + urlStr)
+      browserHistory.push("?product-list?filter=1&" + urlStr);
+    }
+  }
+  componentWillMount() {
+    this.formatFilterData(this.props.HomePage.initialFilters.filterList);
+    this.props.fetchCategoryData('https://m.gozefo.com/api/category/bangalore/beds/product-list?filter=1&from=0&size=24&')
+    browserHistory.push("?product-list?filter=1");
+  }
   componentDidMount() {
-    this.props.fetchCategoryData('https://m.gozefo.com/api/category/bangalore/beds/product-list?filter=1&from=0&size=24')
+    // this.props.fetchCategoryData('https://m.gozefo.com/api/category/bangalore/beds/product-list?filter=1&from=0&size=24')
     this.props.fetchFilterData('https://m.gozefo.com/api/category/bangalore/beds/facets?filter=1')
   }
   componentWillReceiveProps(newProps) {
@@ -40,55 +86,34 @@ export class CategoryHp extends React.Component { // eslint-disable-line react/p
     }
     if (newProps.HomePage && newProps.HomePage.responseDataFilter && newProps.HomePage.responseDataFilter.data) {
       const allFilterData = newProps.HomePage.responseDataFilter.data.filterList;
-      // console.log(allFilterData)
-      var filterDataArr = []
-      for (var i = 0; i < allFilterData.length; i++) {
-        if (allFilterData[i].type !== "range") {
-          var filterObj = {}
-          filterObj.boxHeading = allFilterData[i].label
-
-
-          var itemList = allFilterData[i].itemList;
-          var itemListArr = []
-          for (var j = 0; j < itemList.length; j++) {
-            // console.log("itemList", itemList[j])
-            var itemListObj = {}
-            itemListObj.label = itemList[j].text
-            itemListObj.subFilter = itemList[j].children
-            itemListArr.push(itemListObj);
-            // console.log(itemList[j].text,itemList[j].children)
-          }
-          filterObj.dropdown = itemListArr
-          filterDataArr.push(filterObj)
-        }
-      }
-      // console.log(itemListArr)
-      // console.log(filterDataArr)
-      this.setState({ filterData: filterDataArr })
+      this.formatFilterData(allFilterData);
     }
   }
+  formatFilterData = (allFilterData) => {
+    var filterDataArr = []
+    for (var i = 0; i < allFilterData.length; i++) {
+      if (allFilterData[i].type !== "range") {
+        var filterObj = {}
+        filterObj.boxHeading = allFilterData[i].label
+        filterObj.value = allFilterData[i].value
+
+
+        var itemList = allFilterData[i].itemList;
+        var itemListArr = []
+        for (var j = 0; j < itemList.length; j++) {
+          var itemListObj = {}
+          itemListObj.label = itemList[j].text
+          itemListObj.value = encodeURIComponent(itemList[j].value)
+          itemListObj.subFilter = itemList[j].children
+          itemListArr.push(itemListObj);
+        }
+        filterObj.dropdown = itemListArr
+        filterDataArr.push(filterObj)
+      }
+    }
+    this.setState({ filterData: filterDataArr })
+  }
   render() {
-    const dropdown = [{
-      label: "Unboxed Plus",
-      subFilter: [{
-        label: "Unboxed Plus"
-      }, {
-        label: "Unboxed"
-      }, {
-        label: "Like New"
-      }]
-    }, {
-      label: "Unboxed",
-      subFilter: [{
-        label: "Unboxed Plus"
-      }, {
-        label: "Unboxed"
-      }, {
-        label: "Like New"
-      }]
-    }, {
-      label: "Unboxed Plus",
-    }]
     return (
       <main>
         <header className="center">header</header>
@@ -99,8 +124,12 @@ export class CategoryHp extends React.Component { // eslint-disable-line react/p
                 this.state.filterData &&
                 this.state.filterData.map((value, index) => {
                   return (
-
-                    <FilterTypeBox key={index} appendUri={this.state.appendUri} appendUriCallback={this.setAppendUri.bind(this)} boxHeading={value.boxHeading} dropdown={value.dropdown} />
+                    <FilterTypeBox key={index}
+                      handleFetchFilterData={this.handleFetchFilterData}
+                      filterHeadingValue={value.value}
+                      removeApiUrlNode={this.removeApiUrlNode}
+                      addApiUrlNode={this.addApiUrlNode}
+                      boxHeading={value.boxHeading} dropdown={value.dropdown} />
                   )
                 })
               }

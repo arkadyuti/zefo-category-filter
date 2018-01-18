@@ -15,7 +15,7 @@ class FilterTypeBox extends React.Component { // eslint-disable-line react/prefe
     this.state = {
       display: false,
       dropdown: this.props.dropdown,
-      filterType: this.props.boxHeading.toLowerCase()
+      filterURL: {}
     }
   }
   handleOnMouseEnter = () => {
@@ -24,36 +24,45 @@ class FilterTypeBox extends React.Component { // eslint-disable-line react/prefe
   handleOnMouseLeave = () => {
     this.setState({ display: false })
   }
-  handleFilterOnClick(index, evt) {
+  handleFilterOnChange(index, evt) {
     let dropdown = this.state.dropdown;
-    //console.log("filter", this.state.dropdown[index]);
-      browserHistory.push("?location"); 
     if (dropdown[index].checked) {
       dropdown[index].checked = false
       if (dropdown[index].subFilter && dropdown[index].subFilter.length > 0) {
         dropdown[index].subFilter.map((val, ind) => {
-          dropdown[index].subFilter[ind].checked = false
+          dropdown[index].subFilter[ind].checked =
+            this.props.removeApiUrlNode(this.props.filterHeadingValue, dropdown[index].subFilter[ind].value)
         })
       }
+      this.props.removeApiUrlNode(this.props.filterHeadingValue, dropdown[index].value)
     } else {
       dropdown[index].checked = true
       if (dropdown[index].subFilter && dropdown[index].subFilter.length > 0) {
+        var subfilterVal = []
+        this.state.filterURL[this.props.filterHeadingValue] = {}
         dropdown[index].subFilter.map((val, ind) => {
           dropdown[index].subFilter[ind].checked = true
+          subfilterVal.push(dropdown[index].subFilter[ind].value)
+          this.props.addApiUrlNode(this.props.filterHeadingValue, dropdown[index].subFilter[ind].value)
         })
+
+        // this.props.addApiUrlNode(this.props.filterHeadingValue, dropdown[index].value, subfilterVal)
+      } else {
+        this.props.addApiUrlNode(this.props.filterHeadingValue, dropdown[index].value)
       }
     }
     this.setState({
       dropdown: dropdown
-    })
-    this.props.appendUriCallback(this.state.filterType, evt.target.dataset.uri);
+    }, this.props.handleFetchFilterData())
   }
-  handleSubFilterOnClick = (index, ind, evt) => {
+  handleSubFilterOnChange = (index, ind, evt) => {
     let dropdown = this.state.dropdown;
     if (dropdown[index]["subFilter"][ind] && dropdown[index]["subFilter"][ind].checked) {
       dropdown[index]["subFilter"][ind].checked = false
       dropdown[index].checked = false
+      this.props.removeApiUrlNode(this.props.filterHeadingValue, dropdown[index]["subFilter"][ind].value)
     } else {
+      this.props.addApiUrlNode(this.props.filterHeadingValue, dropdown[index]["subFilter"][ind].value)
       dropdown[index]["subFilter"][ind].checked = true
       var allSubFilter = false
       for (var i = 0; i < dropdown[index]["subFilter"].length; i++) {
@@ -70,7 +79,7 @@ class FilterTypeBox extends React.Component { // eslint-disable-line react/prefe
     }
     this.setState({
       dropdown: dropdown
-    })
+    }, this.props.handleFetchFilterData())
     // dropdown[index].subFilter[ind] = false
     // if (evt.target.checked) {
 
@@ -82,22 +91,18 @@ class FilterTypeBox extends React.Component { // eslint-disable-line react/prefe
     // }
   }
   componentDidMount() {
-    // console.log("did", this.state.dropdown)
   }
   componentWillReceiveProps(newProps) {
     // if (newProps && newProps.allFilterData && newProps.allFilterData.data && newProps.allFilterData.data.filterList) {
-    //   console.log(newProps.allFilterData.data.filterList)
     //   const filterList = newProps.allFilterData.data.filterList;
     //   var dropdown = [];
     //   for (var i = 0; i < filterList.length; i++) {
     //     if (filterList[i].type !== "range") {
-    //       // console.log(filterList[i])
     //       var data = {};
     //       data.label = filterList[i].label
     //       dropdown.push(data)
     //     }
     //   }
-    //   console.log(dropdown)
     // }
   }
   getDataUri(str) {
@@ -106,6 +111,7 @@ class FilterTypeBox extends React.Component { // eslint-disable-line react/prefe
   render() {
     const { boxHeading } = this.props;
     const { dropdown } = this.state;
+    // console.log(this.state)
     // console.log(this.props)
     return (
       <li className="box-filter-wrapper" onMouseEnter={this.handleOnMouseEnter} onMouseLeave={this.handleOnMouseLeave}>
@@ -117,7 +123,7 @@ class FilterTypeBox extends React.Component { // eslint-disable-line react/prefe
               return (
                 <li key={index} className="cursorPointer">
                   <a className="cursorPointer">
-                    <input className="cursorPointer" data-uri={this.getDataUri(value.label)} type="checkbox" id={"filter-" + index} onChange={this.handleFilterOnClick.bind(this, index)} checked={checkCheckedFilter} />
+                    <input className="cursorPointer" data-uri={this.getDataUri(value.label)} type="checkbox" id={"filter-" + index} onChange={this.handleFilterOnChange.bind(this, index)} checked={checkCheckedFilter} />
                     <label className="cursorPointer" htmlFor={"filter-" + index}>{value.label}</label>
                     {value.subFilter && value.subFilter.length > 0 &&
                       value.subFilter.map((val, ind) => {
@@ -125,7 +131,7 @@ class FilterTypeBox extends React.Component { // eslint-disable-line react/prefe
                         return (
                           <div key={"subfilter" + ind} className="cursorPointer subfilter-dropdown">
                             <span className="cursorPointer">
-                              <input className="cursorPointer" type="checkbox" id={"subfilter-" + ind} onChange={this.handleSubFilterOnClick.bind(this, index, ind)} checked={checkChecked} />
+                              <input className="cursorPointer" type="checkbox" id={"subfilter-" + ind} onChange={this.handleSubFilterOnChange.bind(this, index, ind)} checked={checkChecked} />
                               <label className="cursorPointer" htmlFor={"subfilter-" + ind}>{val.text}</label>
                             </span>
                           </div>
