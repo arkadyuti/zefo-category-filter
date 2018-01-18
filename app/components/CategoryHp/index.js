@@ -5,6 +5,7 @@
 */
 
 import React, { PropTypes } from 'react';
+import { browserHistory } from 'react-router';
 import FilterTypeBox from 'components/FilterTypeBox'
 import GridTypeOne from 'components/common/GridTypeOne'
 // import styled from 'styled-components';
@@ -13,8 +14,20 @@ export class CategoryHp extends React.Component { // eslint-disable-line react/p
     super(props);
     this.state = {
       productList: undefined,
-      filterData: null
+      filterData: null,
+      appendUri : '?filter=1'
     };
+  }
+  setAppendUri(filterType, uri) {
+    // this.setState({
+    //   appendUri:  `${this.state.appendUri}&z.filters.filterFeatures.${filterType}[0]=${uri}`},
+    // () => {
+    //   const location = Object.assign({}, browserHistory.getCurrentLocation());
+    //   Object.assign(location.query, this.state.appendUri);
+    //   browserHistory.push(location);  
+    //   debugger
+    // });
+
   }
   componentDidMount() {
     this.props.fetchCategoryData('https://m.gozefo.com/api/category/bangalore/beds/product-list?filter=1&from=0&size=24')
@@ -87,7 +100,7 @@ export class CategoryHp extends React.Component { // eslint-disable-line react/p
                 this.state.filterData.map((value, index) => {
                   return (
 
-                    <FilterTypeBox key={index} boxHeading={value.boxHeading} dropdown={value.dropdown} />
+                    <FilterTypeBox key={index} appendUri={this.state.appendUri} appendUriCallback={this.setAppendUri.bind(this)} boxHeading={value.boxHeading} dropdown={value.dropdown} />
                   )
                 })
               }

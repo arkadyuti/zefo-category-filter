@@ -5,6 +5,7 @@
 */
 
 import React from 'react';
+import { browserHistory } from 'react-router';
 // import styled from 'styled-components';
 
 
@@ -14,6 +15,7 @@ class FilterTypeBox extends React.Component { // eslint-disable-line react/prefe
     this.state = {
       display: false,
       dropdown: this.props.dropdown,
+      filterType: this.props.boxHeading.toLowerCase()
     }
   }
   handleOnMouseEnter = () => {
@@ -24,8 +26,8 @@ class FilterTypeBox extends React.Component { // eslint-disable-line react/prefe
   }
   handleFilterOnClick(index, evt) {
     let dropdown = this.state.dropdown;
-    console.log("filter", this.state.dropdown[index]);
-
+    //console.log("filter", this.state.dropdown[index]);
+      browserHistory.push("?location"); 
     if (dropdown[index].checked) {
       dropdown[index].checked = false
       if (dropdown[index].subFilter && dropdown[index].subFilter.length > 0) {
@@ -44,6 +46,7 @@ class FilterTypeBox extends React.Component { // eslint-disable-line react/prefe
     this.setState({
       dropdown: dropdown
     })
+    this.props.appendUriCallback(this.state.filterType, evt.target.dataset.uri);
   }
   handleSubFilterOnClick = (index, ind, evt) => {
     let dropdown = this.state.dropdown;
@@ -97,10 +100,13 @@ class FilterTypeBox extends React.Component { // eslint-disable-line react/prefe
     //   console.log(dropdown)
     // }
   }
+  getDataUri(str) {
+    return str.toLowerCase();
+  }
   render() {
     const { boxHeading } = this.props;
     const { dropdown } = this.state;
-    console.log(this.props)
+    // console.log(this.props)
     return (
       <li className="box-filter-wrapper" onMouseEnter={this.handleOnMouseEnter} onMouseLeave={this.handleOnMouseLeave}>
         <a>{boxHeading}</a>
@@ -111,7 +117,7 @@ class FilterTypeBox extends React.Component { // eslint-disable-line react/prefe
               return (
                 <li key={index} className="cursorPointer">
                   <a className="cursorPointer">
-                    <input className="cursorPointer" type="checkbox" id={"filter-" + index} onChange={this.handleFilterOnClick.bind(this, index)} checked={checkCheckedFilter} />
+                    <input className="cursorPointer" data-uri={this.getDataUri(value.label)} type="checkbox" id={"filter-" + index} onChange={this.handleFilterOnClick.bind(this, index)} checked={checkCheckedFilter} />
                     <label className="cursorPointer" htmlFor={"filter-" + index}>{value.label}</label>
                     {value.subFilter && value.subFilter.length > 0 &&
                       value.subFilter.map((val, ind) => {
