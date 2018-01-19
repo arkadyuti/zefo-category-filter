@@ -15,8 +15,9 @@ class FilterTypeBox extends React.Component { // eslint-disable-line react/prefe
     this.state = {
       display: false,
       dropdown: this.props.dropdown,
-      filterURL: {}
-    }
+      filterURL: {},
+      checkForValues: []
+    };
   }
   handleOnMouseEnter = () => {
     this.setState({ display: true })
@@ -90,6 +91,13 @@ class FilterTypeBox extends React.Component { // eslint-disable-line react/prefe
     //   })
     // }
   }
+  componentWillMount() {
+    if (this.props.filtersFromUrl && this.props.filtersFromUrl[this.props.boxHeading] && this.props.filtersFromUrl[this.props.boxHeading].length) {
+      this.setState({
+        checkForValues: this.props.filtersFromUrl[this.props.boxHeading]
+      });
+    }
+  }
   componentDidMount() {
   }
   componentWillReceiveProps(newProps) {
@@ -105,29 +113,42 @@ class FilterTypeBox extends React.Component { // eslint-disable-line react/prefe
     //   }
     // }
   }
-  getDataUri(str) {
-    return str.toLowerCase();
-  }
   render() {
     const { boxHeading } = this.props;
-    const { dropdown } = this.state;
+    const { dropdown, checkForValues, display } = this.state;
     // console.log(this.state)
     // console.log(this.props)
     return (
       <li className="box-filter-wrapper" onMouseEnter={this.handleOnMouseEnter} onMouseLeave={this.handleOnMouseLeave}>
         <a>{boxHeading}</a>
-        {this.state.display && <ul className="box-filter-dropdown">
+        {display && <ul className="box-filter-dropdown">
           {
             dropdown && dropdown.map((value, index) => {
-              let checkCheckedFilter = value.checked ? "checked" : ""
+              const matchForSelf = checkForValues
+                &&
+                checkForValues.length
+                &&
+                checkForValues.filter((eachValue) => eachValue === value.value)[0];
+              const subFiltersArray = checkForValues
+                &&
+                checkForValues.length
+                &&
+                value.subFilter
+                &&
+                value.subFilter.length
+                &&
+                checkForValues.filter((eachValue, i) => eachValue === value.subFilter[i].value);
+              const matched = matchForSelf || (subFiltersArray && value.subFilter && subFiltersArray.length === value.subFilter.length);
+              const checkCheckedFilter = matched ? "checked" : (value.checked ? "checked" : "");
               return (
                 <li key={index} className="cursorPointer">
                   <a className="cursorPointer">
-                    <input className="cursorPointer" data-uri={this.getDataUri(value.label)} type="checkbox" id={"filter-" + index} onChange={this.handleFilterOnChange.bind(this, index)} checked={checkCheckedFilter} />
+                    <input className="cursorPointer" type="checkbox" id={"filter-" + index} onChange={this.handleFilterOnChange.bind(this, index)} checked={checkCheckedFilter} />
                     <label className="cursorPointer" htmlFor={"filter-" + index}>{value.label}</label>
                     {value.subFilter && value.subFilter.length > 0 &&
                       value.subFilter.map((val, ind) => {
-                        let checkChecked = val.checked ? "checked" : ""
+                        let matchedInner = this.state.checkForValues && this.state.checkForValues.length && this.state.checkForValues.filter((value) => value === val.value)[0];
+                        let checkChecked = matchedInner ? "checked" : (val.checked ? "checked" : "");
                         return (
                           <div key={"subfilter" + ind} className="cursorPointer subfilter-dropdown">
                             <span className="cursorPointer">

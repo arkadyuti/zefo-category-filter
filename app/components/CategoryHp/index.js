@@ -8,6 +8,7 @@ import React, { PropTypes } from 'react';
 import { browserHistory } from 'react-router';
 
 import FilterTypeBox from 'components/FilterTypeBox'
+import Filters from 'components/Filters'
 import GridTypeOne from 'components/common/GridTypeOne'
 // import styled from 'styled-components';
 export class CategoryHp extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -16,7 +17,8 @@ export class CategoryHp extends React.Component { // eslint-disable-line react/p
     this.state = {
       productList: undefined,
       filterData: null,
-      filterApiObject: {}
+      filterApiObject: {},
+      filtersFromUrl: []
     };
   }
   setAppendUri(filterType, uri) {
@@ -67,13 +69,31 @@ export class CategoryHp extends React.Component { // eslint-disable-line react/p
       })
       this.props.fetchFilterData("https://m.gozefo.com/api/category/bangalore/beds/facets?filter=1" + urlStr)
       this.props.fetchCategoryData('https://m.gozefo.com/api/category/bangalore/beds/product-list?filter=1&from=0&size=24&' + urlStr)
-      browserHistory.push("?product-list?filter=1&" + urlStr);
+      browserHistory.push("?product-list?filter=1" + urlStr);
     }
   }
   componentWillMount() {
+    var filtersFromUrl = window.location.href.split('&filterFeatures.').filter((a,i) => i!==0),
+      urlOnLoad = window.location.href;
+    if (filtersFromUrl.length) {
+      urlOnLoad = urlOnLoad.replace('http://localhost:3333/?', 'https://m.gozefo.com/api/category/bangalore/beds/');
+      var abc = {};
+      filtersFromUrl.map(function(a,i){
+        var b = a.split('='),
+          type = b[0].toUpperCase(),
+          value = b[1];
+        abc[type] ? abc[type].push(value) : abc[type]=[value];
+      });
+      this.setState({
+        filtersFromUrl: abc
+      })
+    }
+    else {
+      urlOnLoad = 'https://m.gozefo.com/api/category/bangalore/beds/product-list?filter=1&from=0&size=24&';
+    }
     this.formatFilterData(this.props.HomePage.initialFilters.filterList);
-    this.props.fetchCategoryData('https://m.gozefo.com/api/category/bangalore/beds/product-list?filter=1&from=0&size=24&')
-    browserHistory.push("?product-list?filter=1");
+    this.props.fetchCategoryData(urlOnLoad);
+    //browserHistory.push("?product-list?filter=1");
   }
   componentDidMount() {
     // this.props.fetchCategoryData('https://m.gozefo.com/api/category/bangalore/beds/product-list?filter=1&from=0&size=24')
@@ -125,11 +145,14 @@ export class CategoryHp extends React.Component { // eslint-disable-line react/p
                 this.state.filterData.map((value, index) => {
                   return (
                     <FilterTypeBox key={index}
+                      filtersFromUrl={this.state.filtersFromUrl}
                       handleFetchFilterData={this.handleFetchFilterData}
                       filterHeadingValue={value.value}
                       removeApiUrlNode={this.removeApiUrlNode}
                       addApiUrlNode={this.addApiUrlNode}
-                      boxHeading={value.boxHeading} dropdown={value.dropdown} />
+                      boxHeading={value.boxHeading}
+                      dropdown={value.dropdown}
+                    />
                   )
                 })
               }
@@ -141,6 +164,11 @@ export class CategoryHp extends React.Component { // eslint-disable-line react/p
               <FilterTypeBox boxHeading="Condition" dropdown={dropdown} allFilterData={this.props.HomePage.responseDataFilter} />
             </div> */}
           </div>
+          {/* { this.state.filterApiObject && Object.keys(this.state.filterApiObject).length &&
+            <div className="cold-md-10 filter-wrapper">
+              <Filters filterApiObject={this.state.filterApiObject} />
+            </div>
+          } */}
           <div className="row centerMe grid-container">
             {this.state.productList
               ?
