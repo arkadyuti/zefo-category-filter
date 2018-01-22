@@ -1,9 +1,9 @@
 // import React from 'react';
 // import { shallow } from 'enzyme';
 
-// import { CategoryFilter } from '../index';
+// import AppliedFilters from '../index';
 
-describe('<CategoryFilter />', () => {
+describe('<AppliedFilters />', () => {
   it('Expect to have unit tests specified', () => {
     expect(true).toEqual(false);
   });

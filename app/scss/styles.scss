@@ -58,8 +58,33 @@ ul,li {
     .subfilter-dropdown {
         margin-left: 10px;
     }
+    .applied-filters {
+        display: inline-block;
+        margin: 20px 0 20px 10px;
+    }
+    .applied-filters li {
+        display: inline-block;
+        border: 1px solid;
+        margin-right: 10px;
+        padding: 4px 10px;
+    }
 }
-
+.is-loading img {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 2;
+    transform: translate(-50%, -50%);
+}
+.is-loading {
+    background-color: rgba(212, 195, 195, 0.36);
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+    height: 100vh;
+}
 
 .catagoryHead{
     color: #444;

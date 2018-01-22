@@ -12,11 +12,25 @@ import {
   FETCH_FILTER_DATA,
   FILTER_DATA_SUCCESS,
   FILTER_DATA_FAILURE,
+  FETCH_CATEGORY_DATA_SCROLL,
+  CATEGORY_DATA_SUCCESS_SCROLL
 } from './constants';
 
 export function defaultAction() {
   return {
     type: DEFAULT_ACTION,
+  };
+}
+export function fetchCategoryDataScroll(payload) {
+  return {
+    type: FETCH_CATEGORY_DATA_SCROLL,
+    payload
+  };
+}
+export function categoryDataSuccessScroll(payload) {
+  return {
+    type: CATEGORY_DATA_SUCCESS_SCROLL,
+    payload
   };
 }
 export function fetchCategoryData(payload) {
