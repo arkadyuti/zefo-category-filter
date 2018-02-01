@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import makeSelectHomePage from './selectors';
 import { fetchCategoryData, fetchFilterData, fetchCategoryDataScroll } from './actions';
-import CategoryHp from 'components/CategoryHP';
+import CategoryHp from 'components/CategoryHp';
 
 
 const mapStateToProps = createStructuredSelector({
